@@ -1,0 +1,36 @@
+<div style="display: flex; place-content: center; height: 133rem; width: 100%;">
+    <div style="display: flex; overflow: hidden; flex-direction: column; width: 100%;">
+        <div class="searchElementHolders" style="background-color: rgb(235 235 235); border-radius: 0.5rem; width: 100%;">
+            <div style="margin: 1.5rem; font-size: 1.2rem; font-family: Roboto;" class="no-recipes-message hidden">No results :(</div>
+            <div style="margin: 1.5rem; font-size: 1.2rem; font-family: Roboto;" class="no-auth-message hidden">You need to log in to view your saved recipes.</div>
+            <div class="cards">
+                <mat-card *ngFor="let recipe of recipeList" [routerLink]="['/recipes/item', recipe._id]" class="cardElement" style="background-color: rgb(238, 241, 241)">
+                    <div class="cardContentAndTags">
+                        <div class="cardContent">
+                            <h2 class="title">{{recipe.name}}</h2>
+                            <div class="overflowDiv">
+                            <p class="content">{{recipe.summary}}</p>
+                            </div>
+                        </div>
+        
+                        
+                    </div>
+                    <div class="buttons">
+                        <button  mat-button color="accent" (click)="deleteRecipe($event, recipe._id)" >Delete</button>
+                        <button  mat-button color="accent" (click)="removeSavedRecipe($event, recipe._id)">Remove</button>
+                    </div>
+                    
+                </mat-card>
+                
+
+            </div>
+            <div class="navigationButtons">
+                <button mat-button class="backButton"(click)="incrementPage(false)">Back</button>
+                <button mat-button class="currentPage">Page {{curPage}}</button>
+                <button mat-button class="nextButton" (click)="incrementPage(true)">Next</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,22 @@
+<div class="auth-container">
+  <h2>Log In</h2>
+  <div class="form-container">
+    <form #logInForm="ngForm">
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Username" ngModel name="username" required>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput type="password" placeholder="Password" ngModel name="password" required>
+      </mat-form-field>
+      
+      
+      <button class="full-width" mat-flat-button color="primary" (click)="logIn(logInForm.value)">Log In</button>
+      <div id="statement1" class="hidden">
+        <mat-error>Account not found with provided username and password.</mat-error>
+      </div>
+      <div id="statement2" class="hidden success">
+        Logged in successfuly.
+      </div>
+    </form>
+  </div>
+</div>

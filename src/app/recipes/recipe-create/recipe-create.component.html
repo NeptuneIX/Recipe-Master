@@ -1,0 +1,39 @@
+<div class="create-recipe">
+    <h1>Create a New Recipe</h1>
+  
+    <div class="form-container">
+      <mat-form-field class="full-width">
+        <input class="inputField" matInput maxlength="50" placeholder="Recipe Title" [(ngModel)]="recipe.name">
+        <div class="inputLength">50 characters max</div>
+      </mat-form-field>
+  
+      <mat-form-field class="full-width" style="margin-bottom: 0px;">
+        <textarea class="inputField" matInput maxlength="500" placeholder="Recipe Content & Summary" [(ngModel)]="recipe.summary" rows="6"></textarea>
+        <div class="inputLength">500 characters max</div>
+      </mat-form-field>
+  
+      <div class="file-upload" style="margin-bottom: 0px;">
+        <label for="fileInput" class="file-input-label">Upload Recipe Image</label>
+        <input type="file" id="fileInput" accept=".jpg, .jpeg, .png" (change)="handleFileInput($event)">
+      </div>
+  
+      <mat-form-field class="full-width">
+        <textarea id="ingredientsField" class="inputField" matInput maxlength="1000" placeholder="Ingredients (one per line)" [(ngModel)]="recipe.ingredients" rows="6"></textarea>
+        <div class="inputLength">1000 characters max</div>
+      </mat-form-field>
+  
+      <mat-form-field class="full-width">
+        <textarea class="inputField" matInput maxlength="1000" placeholder="Cooking Steps (one per line)" [(ngModel)]="recipe.steps" rows="6"></textarea>
+        <div class="inputLength">1000 characters max</div>
+      </mat-form-field>
+
+      <div class="incomplete-message hidden">One or more of the fields have not been filled.</div>
+      <div class="failure-message hidden">You are either not authenticated or an error has occurred.</div>
+      <div class="success-message hidden">Sucessfully posted recipe.</div>
+
+      <div class="action-buttons">
+        <button mat-flat-button (click)="postRecipe()" color="primary">Post Recipe</button>
+      </div>
+    </div>
+  </div>
+  
