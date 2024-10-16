@@ -40,16 +40,11 @@ export class HeaderComponent implements OnInit{
       .then(username => {
         // Assign the received username to the component property
         this.username = username;
-        console.log('Received username:', username);
-      })
-      .catch(error => {
-        console.error('Error occurred while fetching username:', error);
       });
   }
 
   configureFrontEnd(currentStatus: any) {
-    console.log(currentStatus);
-      
+
     // Update front end when logging in
     if(currentStatus) {
       this.switchAuthFields(true);
@@ -64,7 +59,6 @@ export class HeaderComponent implements OnInit{
   ngOnInit(): void {
     // When first loading or refreshing, check if there is an authenticated user & update front end
     this.authService.checkAuthState().then(result => {
-      console.log("the result is" + result);
       if(result) {
         this.configureFrontEnd(true);
       }

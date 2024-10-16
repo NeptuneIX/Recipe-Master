@@ -22,6 +22,7 @@ export class AuthSignupComponent implements OnDestroy, OnInit {
   // This will handle updating the status of the HTTP result with the front end, using a subject from authService
   ngOnInit(): void {
     this.statusSubscription = this.authService.currentStatusObservable.subscribe(currentStatus => {
+      console.log(currentStatus);
       this.statement1 = document.querySelector("#statement1");
       this.statement2 = document.querySelector("#statement2");
       // Toggle as necessary every time the status is changed
@@ -48,7 +49,9 @@ export class AuthSignupComponent implements OnDestroy, OnInit {
     const username = formData.username;
     const password = formData.password;
     
-
-    this.authService.signUp(username, password);
+    // Don't execute if one of the fields is empty
+    if(password.length !== 0 && password.length !== 0){
+      this.authService.signUp(username, password);
+    };
   }
 }

@@ -32,7 +32,6 @@ export class ProfileRecipesComponent implements OnInit, OnDestroy {
         if(authenticated) {
           // 1) Toggle the message for no recipes depending if we have/don't have recipes
           // 2) Handle pagination
-          console.log(this.recipeList.length);
           // Just in case it's been removed
           noAuthMessage.classList.add("hidden");
           // No Recipes message

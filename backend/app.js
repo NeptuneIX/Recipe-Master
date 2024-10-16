@@ -1,7 +1,6 @@
 const express = require("express");
 const {ObjectId} = require('mongodb');
 const path = require("path");
-const multer = require("multer");
 const cors = require("cors");
 const app = express();
 const recipeSchema = require('./recipe');
@@ -14,25 +13,44 @@ const MIME_TYPE_MAP = {
   'image/jpg': 'jpg'
 }
 
-// Configure multer to handle file uploads
-const storage = multer.diskStorage({
-  // This is the callback called when deciding the destination
-  destination: (req,file,cb) => {
-    const isValid = MIME_TYPE_MAP[file.mimetype];
-    let error = new Error("Invalid mime type");
-    if(isValid) {
-      error = null;
-    }
-    cb(error, "backend/images");
-  },
-  // This is the callback called when creating the filename
-  filename: (req,file,cb) => {
-    const name = file.originalname.toLowerCase().split(' ').join('-');
-    const ext = MIME_TYPE_MAP[file.mimetype];
-    cb(null, name + "-" + Date.now() + "." + ext);
-    }
-});
-const upload = multer({storage:storage});
+// Configure multer to handle file uploads using Azure cloud storage
+
+const multer = require("multer");
+const { BlobServiceClient } = require('@azure/storage-blob');
+
+// Set up Azure Blob Storage
+
+// Connection string to authenticate with azure storage blob
+const AZURE_STORAGE_CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=ivanprojectfiles;AccountKey=tdD/w/nTeVUBmdhPQ7OWxNoUl8vtvJhPEf7CXQgAoygCDZZJdaPonrZIsagdG/GX5NdDMqPKx5D4+AStw4do2Q==;EndpointSuffix=core.windows.net";
+const AZURE_CONTAINER_NAME = "recipe-images"; // Your Azure container name
+
+const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
+
+// Helper function to upload image to Azure Blob Storage
+const uploadFileToAzure = async (buffer, mimetype, originalname) => {
+  const blobName = originalname.split(' ').join('-').toLowerCase() + "-" + Date.now() + path.extname(originalname);
+  const containerClient = blobServiceClient.getContainerClient(AZURE_CONTAINER_NAME);
+  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+  // Upload the file to Azure Blob Storage
+  await blockBlobClient.uploadData(buffer, {
+    blobHTTPHeaders: { blobContentType: mimetype } // Set the correct MIME type
+  });
+
+  // Return the URL of the uploaded file
+  return blockBlobClient.url;
+};
+
+// Helper function to delete a blob from Azure Blob Storage
+const deleteFileFromAzure = async (filename) => {
+  const containerClient = blobServiceClient.getContainerClient(AZURE_CONTAINER_NAME);
+  const blockBlobClient = containerClient.getBlockBlobClient(filename);
+
+  await blockBlobClient.deleteIfExists();
+};
+
+// Use Multer for handling file uploads
+const upload = multer({ storage: multer.memoryStorage() });
 
 
 // Cors is needed if we call requests in the backend(localhost:3000) from the frontend(localhost:4200) 
@@ -102,32 +120,39 @@ app.use('/', (req, res, next) => {
 
 
 // In our angular component, this gets called after the request above is finished
-app.post('/api/createRecipe', upload.single('image'), (req, res, next) => {
-  const url = req.protocol + '://' + req.get("host");
-  const newRecipe = new recipeSchema({
-    name: req.body.name,
-    summary: req.body.summary,
-    steps: req.body.steps,
-    ingredients: req.body.ingredients,
-    image: url + "/images/" + req.file.filename,
-    userId: req.user._id.toString()
-  });
+app.post('/api/createRecipe', upload.single('image'), async (req, res, next) => {
+  try {
+    // Upload the file to Azure Blob Storage
+    const fileUrl = await uploadFileToAzure(req.file.buffer, req.file.mimetype, req.file.originalname);
     
-
-    
-  // Mongoose schema allows us to easily save this object to the DB
-  newRecipe.save().then(recipe => {
-    res.status(201).json({
-      message: "Successfuly saved recipe.",
-      recipe: recipe 
+    // Create the recipe object with the URL of the uploaded image from Azure
+    const newRecipe = new recipeSchema({
+      name: req.body.name,
+      summary: req.body.summary,
+      steps: req.body.steps,
+      ingredients: req.body.ingredients,
+      image: fileUrl,  // Use the Azure Blob Storage URL
+      userId: req.user._id.toString()
     });
-  })
-  .catch(err => {
+
+    // Save the new recipe to the database
+    newRecipe.save().then(recipe => {
+      res.status(201).json({
+        message: "Successfully saved recipe.",
+        recipe: recipe
+      });
+    }).catch(err => {
       console.error(err);
       res.status(500).json({
-      error: err.message
+        error: err.message
+      });
     });
-  });
+  } catch (err) {
+    console.error("Error uploading file to Azure:", err);
+    res.status(500).json({
+      error: 'Failed to upload file and create recipe.'
+    });
+  }
 });
 
 app.get("/api/getRecipe/:id", (req, res, next) => {
@@ -215,60 +240,41 @@ app.get('/api/searchRecipes/:searchQuery', (req, res, next) => {
     }})
 });
 
-// pls fix this later, deleteOne works but idk how to delete it from the backend/images here
-app.delete('/api/deleteRecipe/:id', (req, res, next) => {
-  const recipeId = req.params.id;
-  // Self explanatory, if there's no recipe or there's no authroization
-  let allIsOK = true;
 
-  // Find the recipe by ID
-  recipeSchema.findById(recipeId)
-    .then(recipe => {
-      
-      if (!recipe) {
-        allIsOK = false;
-        res.status(404).json({ message: 'Recipe not found' });
-      }
-      if(recipe.userId != req.user._id.toString()) {
-        allIsOK = false;
-        res.status(401).json({ message: 'User not authorized.' });
-      }
-      // Extract filename from image URL
-      const filename = recipe.image.split('images/')[1];
-      
-        
-      // Delete the image file from the file system
-      if(allIsOK) {
-        fs.unlink('./backend/images/' + filename, (err) => {
-          if (err) {
-            console.error(err);
-            allIsOK = false;
-            res.status(500).json({ error: 'Failed to delete image file' });
-          }
-        });
-      }
-    }).then(() => {
-      // If there hasn't been any errors, proceed to delete recipe.
-      if(allIsOK) {
-        recipeSchema.deleteOne({_id: recipeId}).then(result => {
-          if(result.deletedCount > 0) {
-       
-            res.status(202).json({
-              message: "Successfully deleted."
-            });
-          } else {
-            res.status(204).json({
-              message: "No document found"
-            });
-          }
-        }).catch(err => {
-          res.status(400).json({
-            message: "Error deleting!"
-          });
-        })
-      }
-    });
-    
+app.delete('/api/deleteRecipe/:id', async (req, res, next) => {
+  try {
+    const recipeId = req.params.id;
+
+    // Find the recipe by ID
+    const recipe = await recipeSchema.findById(recipeId);
+
+    if (!recipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+
+    // Check if the current user is authorized to delete the recipe
+    if (recipe.userId !== req.user._id.toString()) {
+      return res.status(401).json({ message: 'User not authorized' });
+    }
+
+    // Extract the filename from the image URL 
+    const filename = recipe.image.split('images/')[1];  
+
+    // Delete the image file from azure blob storage
+    await deleteFileFromAzure(filename);
+
+    // Delete the recipe document from the database
+    const result = await recipeSchema.deleteOne({ _id: recipeId });
+
+    if (result.deletedCount > 0) {
+      res.status(200).json({ message: 'Successfully deleted recipe and image file from Azure.' });
+    } else {
+      res.status(404).json({ message: 'No document found for deletion.' });
+    }
+  } catch (error) {
+    console.error('Error deleting recipe:', error);
+    res.status(500).json({ message: 'Error deleting recipe and/or image file from Azure.' });
+  }
 });
 
 

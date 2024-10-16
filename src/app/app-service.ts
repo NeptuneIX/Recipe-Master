@@ -59,7 +59,7 @@ export class AppService {
    })
   }
 
-  // Get saved recipe from CURRENT user
+  // Get saved recipes from CURRENT user
   getSavedRecipeList() {
    this.httpClient.get<{message: string, recipes: any}>('http://localhost:3000/api/getSavedRecipes/' + this.curPage, { withCredentials: true }).subscribe(result => {
       this.savedRecipeList = result.recipes;
