@@ -21,7 +21,7 @@ const { BlobServiceClient } = require('@azure/storage-blob');
 // Set up Azure Blob Storage
 
 // Connection string to authenticate with azure storage blob
-const AZURE_STORAGE_CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=ivanprojectfiles;AccountKey=tdD/w/nTeVUBmdhPQ7OWxNoUl8vtvJhPEf7CXQgAoygCDZZJdaPonrZIsagdG/GX5NdDMqPKx5D4+AStw4do2Q==;EndpointSuffix=core.windows.net";
+const AZURE_STORAGE_CONNECTION_STRING = "githubplaceholderstringlol";
 const AZURE_CONTAINER_NAME = "recipe-images"; // Your Azure container name
 
 const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
