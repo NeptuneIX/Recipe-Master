@@ -56,7 +56,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 // Cors is needed if we call requests in the backend(localhost:3000) from the frontend(localhost:4200) 
 // When we use sessions with passport.js, we need credentials to equal true and pass {withCredentials: true} when calling any request!
 app.use(cors({
-  origin: 'http://localhost:4200',
+  origin: 'https://recipe-master-eight.vercel.app',
   credentials: true, // Enable credentials (cookies, authorization headers)
   "Access-Control-Allow-Credentials": true
 }));
