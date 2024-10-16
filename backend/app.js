@@ -21,7 +21,7 @@ const { BlobServiceClient } = require('@azure/storage-blob');
 // Set up Azure Blob Storage
 
 // Connection string to authenticate with azure storage blob
-const AZURE_STORAGE_CONNECTION_STRING = "githubplaceholderstringlol";
+const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
 const AZURE_CONTAINER_NAME = "recipe-images"; // Your Azure container name
 
 const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
@@ -86,7 +86,7 @@ const authRoutes = require("./auth/auth")(passport);
 // Store sessions in MongoDB database
 const MongoDBStore = require('connect-mongodb-session')(session);
 const store = new MongoDBStore({
-  uri: 'mongodb+srv://NeptuneIX:Ue2Qy48VpWAoj5PS@cluster0.dm1zltx.mongodb.net/', // MongoDB connection URI
+  uri: process.env.mongoDB_connection_string, // MongoDB connection URI
   databaseName: "test",
   collection: 'sessions' // MongoDB collection to store sessions
 });
