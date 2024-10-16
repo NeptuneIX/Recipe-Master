@@ -1,10 +1,8 @@
 const http = require('http');
 const app = require('./backend/app');
 
-const hostname = 'localhost';
-const port = 3000;
-
-
+const hostname = process.env.HOSTNAME || 'localhost';
+const port = process.env.PORT || 3000; // Default to 3000 if not set
 
 const onError = error => {
   if (error.syscall !== "listen") {
@@ -30,5 +28,5 @@ const server = http.createServer(app);
 server.on("error", onError);
 
 server.listen(port, hostname, function() {
-  console.log('Server running at http://'+ hostname + ':' + port + '/');
+  console.log(`Server running at http://${hostname}:${port}/`);
 });
