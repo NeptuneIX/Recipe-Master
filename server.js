@@ -2,7 +2,7 @@ const http = require('http');
 const app = require('./backend/app');
 
 const hostname = process.env.HOSTNAME || 'localhost';
-const port = process.env.PORT || 3000; // Default to 3000 if not set
+const port = process.env.PORT;
 
 const onError = error => {
   if (error.syscall !== "listen") {
