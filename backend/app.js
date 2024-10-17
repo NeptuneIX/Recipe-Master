@@ -6,25 +6,16 @@ const app = express();
 const recipeSchema = require('./recipe');
 const fs = require('fs');
 
-app.options('*', cors({
-  origin: 'https://recipe-master-eight.vercel.app',
-  credentials: true,
-}));
 
 // When we use sessions with passport.js, we need credentials to equal true and pass {withCredentials: true} when calling any request!
 app.use(cors({
   origin: 'https://recipe-master-eight.vercel.app',
-  credentials: true, // Enable credentials (cookies, authorization headers)
-  "Access-Control-Allow-Credentials": true
+  credentials: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: 'Content-Type,Authorization',
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://recipe-master-eight.vercel.app");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  next();
-});
 
 app.use((req, res, next) => {
   console.log(req.headers);
