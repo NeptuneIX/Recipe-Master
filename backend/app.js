@@ -100,9 +100,14 @@ const store = new MongoDBStore({
   collection: 'sessions' // MongoDB collection to store sessions
 });
 
+// Error handling for the session store
+store.on('error', function(error) {
+    console.error('Session store error:', error);
+});
+
 // Configuring & initializing passport.js
 app.use(session({
-  secret: 'd8a6b7e7f6c5c2af8d1e0b3a2e9c5d7b4f7d5a2e0c4b9a1e3f0c9d1b8e2a5',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   store: store, // Use MongoDBStore for session storage
