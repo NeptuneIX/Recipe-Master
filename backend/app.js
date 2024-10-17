@@ -6,6 +6,18 @@ const app = express();
 const recipeSchema = require('./recipe');
 const fs = require('fs');
 
+app.options('*', cors({
+  origin: 'https://recipe-master-eight.vercel.app',
+  credentials: true,
+}));
+
+// When we use sessions with passport.js, we need credentials to equal true and pass {withCredentials: true} when calling any request!
+app.use(cors({
+  origin: 'https://recipe-master-eight.vercel.app',
+  credentials: true, // Enable credentials (cookies, authorization headers)
+  "Access-Control-Allow-Credentials": true
+}));
+
 // Acceptable mime types
 const MIME_TYPE_MAP = {
   'image/png': 'png',
@@ -53,12 +65,6 @@ const deleteFileFromAzure = async (filename) => {
 const upload = multer({ storage: multer.memoryStorage() });
 
 
-// When we use sessions with passport.js, we need credentials to equal true and pass {withCredentials: true} when calling any request!
-app.use(cors({
-  origin: 'https://recipe-master-eight.vercel.app',
-  credentials: true, // Enable credentials (cookies, authorization headers)
-  "Access-Control-Allow-Credentials": true
-}));
 
 // Notices whenever we receive JSON data, then processes it
 app.use(express.json());
