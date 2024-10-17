@@ -49,7 +49,7 @@ export class AppService {
   // Get & update recipes from backend
   getRecipeList() {
     // CurPage is always kept updated and reset, we handle that elsewhere though
-   this.httpClient.get<{message: string, recipes: any}>('https://recipe-master-shxr.onrender.com/api/getRecipes/' + this.curPage).subscribe(result => {
+   this.httpClient.get<{message: string, recipes: any}>('http://srv-cs837da3esus7386f700-hibernate-6f485bd765-cw578:10000/api/getRecipes/' + this.curPage).subscribe(result => {
      this.recipeList = result.recipes;
     this.recipeListObservable.next([...this.recipeList]);
    }, // If we get a status 4xx it executes this instead
@@ -61,7 +61,7 @@ export class AppService {
 
   // Get saved recipes from CURRENT user
   getSavedRecipeList() {
-   this.httpClient.get<{message: string, recipes: any}>('https://recipe-master-shxr.onrender.com/api/getSavedRecipes/' + this.curPage, { withCredentials: true }).subscribe(result => {
+   this.httpClient.get<{message: string, recipes: any}>('http://srv-cs837da3esus7386f700-hibernate-6f485bd765-cw578:10000/api/getSavedRecipes/' + this.curPage, { withCredentials: true }).subscribe(result => {
       this.savedRecipeList = result.recipes;
       this.savedRecipeListObservable.next([...this.savedRecipeList]);
     }, // If we get a status 4xx it executes this instead
@@ -96,7 +96,7 @@ export class AppService {
 
   getRecipe(recipeDataId: string) {
     // Get recipe and set it as the current one
-    this.httpClient.get<{message: string, recipe: any}>("https://recipe-master-shxr.onrender.com/api/getRecipe/" + recipeDataId).subscribe(result => {
+    this.httpClient.get<{message: string, recipe: any}>("http://srv-cs837da3esus7386f700-hibernate-6f485bd765-cw578:10000/api/getRecipe/" + recipeDataId).subscribe(result => {
       this.currentRecipe = result.recipe;
       this.currentRecipeObservable.next(result.recipe);
     });
@@ -104,7 +104,7 @@ export class AppService {
 
 
   searchRecipes(recipeName: string) {
-    this.httpClient.get<{message: string, searchResults: any}>('https://recipe-master-shxr.onrender.com/api/searchRecipes/' + recipeName).subscribe(result => {
+    this.httpClient.get<{message: string, searchResults: any}>('http://srv-cs837da3esus7386f700-hibernate-6f485bd765-cw578:10000/api/searchRecipes/' + recipeName).subscribe(result => {
       // We set the search results to local storage & we can retrieve them later
       localStorage.setItem("searchResults", JSON.stringify(result.searchResults));
       // Fix this later, you need to somehow make the results appear  on recipe-search while having it follow its other logic
@@ -127,7 +127,7 @@ export class AppService {
 
       this.authRequest().then(authState => {
         if(authState) {
-          this.httpClient.post<{message: string, recipe: any}>('https://recipe-master-shxr.onrender.com/api/createRecipe', postData, { withCredentials: true }).subscribe(response => {
+          this.httpClient.post<{message: string, recipe: any}>('http://srv-cs837da3esus7386f700-hibernate-6f485bd765-cw578:10000/api/createRecipe', postData, { withCredentials: true }).subscribe(response => {
             // Just update the recipeList observable on our front end by getting it from the backend
             this.getRecipeList()
             resolve(true);
@@ -146,7 +146,7 @@ export class AppService {
     // Since an HTTP get request is async we return a promise that will eventually return the result
     return new Promise((resolve, reject) => {
       // { withCredentials: true } is needed for sessions in passport.js to function properky and req.isAuthenticated() to work
-      this.httpClient.get<{ message: string, username: string, userStatus: string }>('https://recipe-master-shxr.onrender.com/auth/getSessionUsername', { withCredentials: true })
+      this.httpClient.get<{ message: string, username: string, userStatus: string }>('http://srv-cs837da3esus7386f700-hibernate-6f485bd765-cw578:10000/auth/getSessionUsername', { withCredentials: true })
         .subscribe(
           response => {
             resolve(response.username); // Resolve the promise with the username
@@ -166,7 +166,7 @@ export class AppService {
     // First check if the user is authenticated, only then proceed with the actual request.
     this.authRequest().then(authState => {
       if(authState) {
-        this.httpClient.delete<{message: string}>('https://recipe-master-shxr.onrender.com/api/deleteRecipe/' + recipeId, {withCredentials: true}).subscribe(response => {
+        this.httpClient.delete<{message: string}>('http://srv-cs837da3esus7386f700-hibernate-6f485bd765-cw578:10000/api/deleteRecipe/' + recipeId, {withCredentials: true}).subscribe(response => {
           this.getRecipeList();
         });
       }
@@ -182,7 +182,7 @@ export class AppService {
     // First check if the user is authenticated, only then proceed with the actual request.
     this.authRequest().then(authState => {
       if(authState) {
-        this.httpClient.post<{message: string}>('https://recipe-master-shxr.onrender.com/auth/saveRecipe', postData, { withCredentials: true }).subscribe(response => {
+        this.httpClient.post<{message: string}>('http://srv-cs837da3esus7386f700-hibernate-6f485bd765-cw578:10000/auth/saveRecipe', postData, { withCredentials: true }).subscribe(response => {
           
         },
         error => {
@@ -199,7 +199,7 @@ export class AppService {
     // First check if the user is authenticated, only then proceed with the actual request.
     this.authRequest().then(authState => {
       if(authState) {
-        this.httpClient.post<{message: string}>('https://recipe-master-shxr.onrender.com/auth/removeSavedRecipe', postData, { withCredentials: true }).subscribe(response => {
+        this.httpClient.post<{message: string}>('http://srv-cs837da3esus7386f700-hibernate-6f485bd765-cw578:10000/auth/removeSavedRecipe', postData, { withCredentials: true }).subscribe(response => {
           // Since we can only perform this action from there, reload that page
           this.router.navigate(['recipes']);
         },
@@ -215,7 +215,7 @@ export class AppService {
       const postData = {
         recipeId: recipeId
       };
-      this.httpClient.post<{message: string}>('https://recipe-master-shxr.onrender.com/auth/checkRecipeSavedStatus', postData, { withCredentials: true }).subscribe(response => {
+      this.httpClient.post<{message: string}>('http://srv-cs837da3esus7386f700-hibernate-6f485bd765-cw578:10000//auth/checkRecipeSavedStatus', postData, { withCredentials: true }).subscribe(response => {
         resolve(true);
       },
       error => {
@@ -228,7 +228,7 @@ export class AppService {
   authRequest(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       // Check if the user is authenticated, only then proceed with the actual request
-      this.httpClient.get<{message: string}>('https://recipe-master-shxr.onrender.com/auth/authRequest', { withCredentials: true }).subscribe(response => {
+      this.httpClient.get<{message: string}>('http://srv-cs837da3esus7386f700-hibernate-6f485bd765-cw578:10000/auth/authRequest', { withCredentials: true }).subscribe(response => {
         resolve(true);
       },
       error => {
