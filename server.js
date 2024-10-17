@@ -26,6 +26,6 @@ const server = http.createServer(app);
 
 server.on("error", onError);
 
-server.listen(port, hostname, function() {
+server.listen(port, function() {
   console.log(`Server running at port ${port}/`);
 });
