@@ -18,6 +18,11 @@ app.use(cors({
   "Access-Control-Allow-Credentials": true
 }));
 
+app.use((req, res, next) => {
+  console.log(req.headers);
+  next();
+});
+
 // Acceptable mime types
 const MIME_TYPE_MAP = {
   'image/png': 'png',
