@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 // Connect to DB
 async function main() {
-    await mongoose.connect('mongodb+srv://NeptuneIX:Ue2Qy48VpWAoj5PS@cluster0.dm1zltx.mongodb.net/').then(() => {
+    await mongoose.connect(process.env.mongoDB_connection_string).then(() => {
       console.log('Connected to database!');
     }).catch(() => {
       console.log("Connection failed");
