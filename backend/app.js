@@ -12,7 +12,8 @@ app.use(cors({
   origin: 'https://recipe-master-eight.vercel.app',
   credentials: true,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  allowedHeaders: 'Content-Type,Authorization',
+  allowedHeaders: 'Content-Type,Authorization,Access-Control-Allow-Credentials',
+  exposedHeaders: 'Access-Control-Allow-Credentials',
   preflightContinue: false,
   optionsSuccessStatus: 204
 }));
