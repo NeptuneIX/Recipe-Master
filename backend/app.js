@@ -113,7 +113,7 @@ app.use(session({
   store: store, // Use MongoDBStore for session storage
   cookie: {
     maxAge: 1000 * 60 * 60 * 24, // Session expiration time (optional)
-    secure: true
+    secure: process.env.NODE_ENV === 'production'
   }
 }));
 app.use(passport.initialize());
