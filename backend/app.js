@@ -114,7 +114,8 @@ app.use(session({
   cookie: {
     maxAge: 1000 * 60 * 60 * 24, // Session expiration time (optional)
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'None'
+    sameSite: 'None',
+    httpOnly: true
   }
 }));
 app.use(passport.initialize());
@@ -128,6 +129,8 @@ app.use('/auth', authRoutes);
 
 // Check auth status (for debugging)
 app.use('/', (req, res, next) => {
+
+  console.log(req.isAuthenticated());
   
   next();
 });
