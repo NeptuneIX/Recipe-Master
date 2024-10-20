@@ -33,7 +33,7 @@ export class authService {
         username: username,
         password: password
       };
-      this.httpClient.post<{ message: string, userStatus: string }>('https://recipe-master-shxr.onrender.com/auth/signUp', postData).subscribe(response => {
+      this.httpClient.post<{ message: string, userStatus: string }>('http://recipemasterapi.duckdns.org/auth/signUp', postData).subscribe(response => {
         // Logic of showing result of HTTP request to the frontend
         this.currentStatus = {status: `${response.userStatus}`, process: "signup"};
         this.currentStatusObservable.next(this.currentStatus);
@@ -55,7 +55,7 @@ export class authService {
         password: password
       };
       // { withCredentials: true } is needed for sessions in passport.js to function properky and req.isAuthenticated() to work
-      this.httpClient.post<{message: string, userStatus: string}>('https://recipe-master-shxr.onrender.com/auth/logIn', postData, { withCredentials: true }).subscribe(response => {
+      this.httpClient.post<{message: string, userStatus: string}>('http://recipemasterapi.duckdns.org/auth/logIn', postData, { withCredentials: true }).subscribe(response => {
          // Logic of showing result of HTTP request to the front end
          this.currentStatus = {status: `${response.userStatus}`, process: "login"};
          this.currentStatusObservable.next(this.currentStatus);
@@ -70,7 +70,7 @@ export class authService {
 
     logOut() {
       // { withCredentials: true } is needed for sessions in passport.js to function properky and req.isAuthenticated() to work
-      this.httpClient.get<{message: string, userStatus: string}>('https://recipe-master-shxr.onrender.com/auth/logOut', { withCredentials: true }).subscribe(response => {
+      this.httpClient.get<{message: string, userStatus: string}>('http://recipemasterapi.duckdns.org/auth/logOut', { withCredentials: true }).subscribe(response => {
 
          // Logic of showing result of HTTP request to the front end
         this.currentStatus = {status: `${response.userStatus}`, process: "logout"};
@@ -90,7 +90,7 @@ export class authService {
       // Since an HTTP get request is async we return a promise that will eventually return the result
       return new Promise((resolve, reject) => {
         // { withCredentials: true } is needed for sessions in passport.js to function properky and req.isAuthenticated() to work
-        this.httpClient.get<{ message: string, username: string, userStatus: string }>('https://recipe-master-shxr.onrender.com/auth/getSessionUsername', { withCredentials: true })
+        this.httpClient.get<{ message: string, username: string, userStatus: string }>('http://recipemasterapi.duckdns.org/auth/getSessionUsername', { withCredentials: true })
           .subscribe(
             response => {
               resolve(response.username); // Resolve the promise with the username
@@ -107,7 +107,7 @@ export class authService {
     checkAuthState(): Promise<boolean> {
       return new Promise((resolve, reject) => {
         // Check if the user is authenticated
-        this.httpClient.get<{message: string}>('https://recipe-master-shxr.onrender.com/auth/authRequest', { withCredentials: true }).subscribe(response => {
+        this.httpClient.get<{message: string}>('http://recipemasterapi.duckdns.org/auth/authRequest', { withCredentials: true }).subscribe(response => {
           resolve(true);
         },
         error => {
