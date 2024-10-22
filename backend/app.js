@@ -9,7 +9,7 @@ const fs = require('fs');
 
 // When we use sessions with passport.js, we need credentials to equal true and pass {withCredentials: true} when calling any request!
 app.use(cors({
-  origin: 'https://recipe-master-eight.vercel.app',
+  origin: 'https://recipemasterapp.duckdns.org',
   credentials: true,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: 'Content-Type,Authorization,Access-Control-Allow-Credentials',
