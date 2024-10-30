@@ -24,6 +24,10 @@ This app is a full-stack recipe management system where users can log in, explor
 - **File Storage:** Azure for managing recipe images and static assets.
 - **Authentication:** Passport.js with sessions for secure user login and access control.
 
+## Getting Started
+
+This repository contains the production branch of the project. However, the reason why there's no website link to it is because some aspects of it are broken when hosted on the public domains of the hosting websites, therefore I would need to pay for my own domain first & then set it up. When I do so there will be a link for it on this repository.
+
 ## Video Overview
 [Watch the video overview](https://youtu.be/y74smD8EGnM)
 
