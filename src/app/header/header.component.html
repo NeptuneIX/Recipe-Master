@@ -1,0 +1,57 @@
+ <p>
+    <mat-toolbar color="dark">
+      
+      <span routerLink="" style="cursor: pointer;" id="siteName">Recipe Master</span>
+      
+
+      <span class="example-spacer"></span>
+      
+      
+        
+        <input (keyup.enter)="onEnterKeyPress($event)" class="search-input" matInput placeholder="Search for recipes">
+        <div class="welcomeMessage hidden" id="welcomeMsg">Hello, {{username}}</div>
+        <ul class="hidden">
+          <li style="text-decoration: none;">
+            <a mat-button class="routerWelcome" style="background-color: rgba(220, 20, 60);" id="logoutBtn" (click)="logOut()">Log Out</a>
+          </li>
+          
+        </ul>
+  
+        <ul>
+          <li style="text-decoration: none;">
+            <a routerLink="auth/signup" mat-button class="routerWelcome" id="signupBtn">Sign Up</a>
+          </li>
+          
+        </ul>
+        <ul>
+          <li style="text-decoration: none;">
+            <a routerLink="auth/login" mat-button class="routerWelcome" id="loginBtn">Log In</a>
+          </li>
+          
+        </ul>
+        <ul>
+          <li style="text-decoration: none;">
+            <a routerLink="recipes" mat-button class="routerWelcome" >Recipes</a>
+          </li>
+          
+        </ul>
+        
+  
+        <ul>
+          
+          <li style="text-decoration: none;">
+            <a routerLink="profile/savedRecipes" mat-button class="routerWelcome" >Saved Recipes</a>
+          </li>
+        </ul>
+        <ul>
+          <li style="text-decoration: none;">
+            <a routerLink="profile/createRecipe" mat-button class="routerWelcome" id="createRecipe">Create recipe</a>
+          </li>
+        </ul>
+      
+    </mat-toolbar>
+  </p> 
+
+ 
+  
+  

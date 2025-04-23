@@ -1,0 +1,34 @@
+const http = require('http');
+const app = require('./app');
+require('dotenv').config({ path: './appsettings.env' });
+
+// environment variables or default values for hostname and port
+const hostname = process.env.HOSTNAME || 'localhost';
+const port = process.env.PORT || 3000; // Default to 3000 if not set
+
+const onError = error => {
+  if (error.syscall !== "listen") {
+    throw error;
+  }
+  const bind = typeof port === "string" ? "pipe " + port : "port " + port;
+  switch (error.code) {
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
+      process.exit(1);
+      break;
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+};
+
+const server = http.createServer(app);
+
+server.on("error", onError);
+
+server.listen(port, hostname, function() {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});

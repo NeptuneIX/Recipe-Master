@@ -1,0 +1,35 @@
+<div class="recipe-details">
+    <div class="recipe-header">
+      {{currentRecipe.name}}
+    </div>
+  
+    <div class="recipe-summary">
+      <img src="{{currentRecipe.image}}" class="recipe-image">
+      <div class="summary">
+        <div class="summary-content">
+          {{currentRecipe.summary}}
+          
+        </div>
+        <!-- <div class="recipe-user">
+          recipe by <span id="user" (click)="viewUserRecipes()">AlexJh323</span>
+        </div> -->
+      </div>
+      
+    </div>
+  
+    <div class="ingredients">
+      <h2>Ingredients</h2>
+      <div style="white-space: pre-line;">{{currentRecipe.ingredients}}</div>
+    </div>
+  
+    <div class="cooking-steps">
+      <h2>Cooking Steps</h2>
+      <div style="white-space: pre-line;">{{currentRecipe.steps}}</div>
+    </div>
+  
+    <div class="action-buttons">
+      <button mat-flat-button color="primary" class="save-recipe hidden" (click)="saveRecipe()" >Save Recipe</button>
+      <button mat-flat-button color="primary" class="remove-recipe hidden" (click)="saveRecipe()" >Remove Recipe</button>
+      <button mat-flat-button color="accent" (click)="deleteRecipe()">Delete Recipe</button>
+    </div>
+  </div>

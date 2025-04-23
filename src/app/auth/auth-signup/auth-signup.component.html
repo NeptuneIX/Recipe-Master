@@ -1,0 +1,27 @@
+<div class="auth-container">
+  <h2>Sign Up</h2>
+  <div class="form-container">
+    <form #signupForm="ngForm">
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Username" ngModel name="username" required>
+        <mat-error ng-show="signupForm.controls['username'].invalid && (signupForm.controls['username'].dirty || signupForm.controls['username'].touched)">
+          Username is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput type="password" placeholder="Password" ngModel name="password" required #passwordInput="ngModel">
+        <mat-error ng-show="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)">
+          Password is required
+        </mat-error>
+      </mat-form-field> 
+      
+      <button class="full-width" mat-flat-button color="primary" (click)="signUp(signupForm.value)">Sign Up</button>
+      <div id="statement1" class="hidden">
+        <mat-error>Account with username already exists.</mat-error>
+      </div>
+      <div id="statement2" class="hidden success">
+        Account created successfully
+      </div>
+    </form>
+  </div>
+</div>
