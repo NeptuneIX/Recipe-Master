@@ -1,4 +1,4 @@
-# 🍲 Full-Stack Recipe App built with Angular, MongoDB, Express & Node.js
+# Full-Stack Recipe App built with Angular, MongoDB, Express & Node.js
 
 This app is a full-stack recipe management system where users can log in, explore recipes, create their own, and save their favorites for easy access. Built with Angular for the front end, Express and Node.js for the backend, and MongoDB as the database, it also uses Azure for file storage and Passport.js for session-based authentication.
 
